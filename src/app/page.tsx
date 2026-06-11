@@ -1,65 +1,65 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ChapterList } from "@/components/ChapterList";
+import { site } from "@/lib/site";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    <div className="space-y-10">
+      {/* 히어로 */}
+      <section className="text-center space-y-4 pt-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 leading-tight">
+          코딩 1도 몰라도,
+          <br />
+          2시간 뒤엔 <span className="text-amber-500">내 웹페이지</span>가
+          인터넷에
+        </h1>
+        <p className="text-stone-600 leading-relaxed max-w-xl mx-auto">
+          영어도, 컴퓨터도 자신 없으셔도 괜찮아요. 화면 그림을 보며 한 단계씩
+          따라 하면, 오늘 안에 나만의 자기소개 페이지를 전 세계에 공개할 수
+          있습니다.
+        </p>
+        <p>
+          <Link href="/demo" className="text-amber-600 font-bold underline underline-offset-4 hover:text-amber-700">
+            완성품 미리 구경하기 →
+          </Link>
+        </p>
+      </section>
+
+      {/* 안심 3종 */}
+      <section className="grid sm:grid-cols-3 gap-3">
+        {[
+          { icon: "🖥️", title: "컴퓨터 안 망가져요", desc: "설치하는 프로그램은 단 1개. 언제든 3초 만에 지울 수 있어요." },
+          { icon: "🛡️", title: "해킹 걱정 없어요", desc: "공식 사이트만 안내하고, 안전한지 확인하는 습관까지 알려드려요." },
+          { icon: "🙋", title: "막혀도 괜찮아요", desc: "단계마다 '막혔어요' 버튼이 있어요. 해결책을 미리 다 준비해 뒀어요." },
+        ].map((c) => (
+          <div key={c.title} className="rounded-2xl bg-white border border-stone-200 p-5 text-center">
+            <div className="text-3xl mb-2">{c.icon}</div>
+            <p className="font-bold text-stone-900 mb-1">{c.title}</p>
+            <p className="text-[15px] text-stone-500 leading-relaxed">{c.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* 시작/이어하기 + 챕터 목록 */}
+      <section>
+        <h2 className="text-xl font-extrabold text-stone-900 mb-4">전체 여정 — 8개 챕터, 약 95분</h2>
+        <ChapterList />
+      </section>
+
+      {/* 채널 연계 (src/lib/site.ts에 주소를 넣으면 표시됨) */}
+      {site.youtubeChannelUrl && (
+        <section className="rounded-3xl bg-stone-800 text-white p-6 text-center space-y-3">
+          <p className="font-bold text-lg">영상으로 같이 보면 더 쉬워요</p>
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href={site.youtubeChannelUrl}
             target="_blank"
             rel="noopener noreferrer"
+            className="inline-block rounded-2xl bg-red-600 hover:bg-red-700 font-bold px-6 py-3 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            ▶ {site.youtubeChannelName || "유튜브 채널"} 보러 가기
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        </section>
+      )}
     </div>
   );
 }
