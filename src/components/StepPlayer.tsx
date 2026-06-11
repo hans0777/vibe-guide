@@ -174,14 +174,14 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
           {nextChapter && (
             <Link
               href={`/guide/${nextChapter.slug}`}
-              className="shine-host rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-8 py-4 btn-press shadow-md shadow-amber-200"
+              className="shine-host rounded-full bg-[#1d1c1b] hover:bg-black text-white font-bold text-lg px-8 py-4 btn-press shadow-sm"
             >
               다음: 챕터 {nextChapter.number}. {nextChapter.title} →
             </Link>
           )}
           <Link
             href="/"
-            className="rounded-2xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-lg px-8 py-4 btn-press"
+            className="rounded-full bg-[#f2f0ed] hover:bg-[#e9e6e2] text-[#343433] font-bold text-lg px-8 py-4 btn-press"
           >
             전체 목차로
           </Link>
@@ -199,9 +199,9 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
             key={s.id}
             className={`h-2.5 rounded-full transition-all duration-500 ${
               i < idx
-                ? "bg-gradient-to-r from-amber-400 to-orange-400 flex-1"
+                ? "bg-[#2ec77f] flex-1"
                 : i === idx
-                ? "bg-amber-400 flex-[2] shadow-sm shadow-amber-200"
+                ? "bg-[#1d1c1b] flex-[2]"
                 : "bg-stone-200 flex-1"
             }`}
           />
@@ -225,13 +225,13 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={goNext}
-                  className="shine-host flex-1 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-6 py-4 btn-press shadow-md shadow-amber-200/80"
+                  className="shine-host flex-1 rounded-full bg-[#1d1c1b] hover:bg-black text-white font-bold text-lg px-6 py-4 btn-press shadow-sm"
                 >
                   ✅ 네! 다음으로
                 </button>
                 <button
                   onClick={() => setShowStuck(!showStuck)}
-                  className="flex-1 rounded-2xl bg-white border-2 border-rose-300 text-rose-700 hover:bg-rose-50 font-bold text-lg px-6 py-4 btn-press"
+                  className="flex-1 rounded-full bg-white border-2 border-rose-300 text-rose-600 hover:bg-rose-50 font-bold text-lg px-6 py-4 btn-press"
                 >
                   😢 막혔어요
                 </button>
@@ -242,7 +242,7 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
             <div className="pt-3">
               <button
                 onClick={goNext}
-                className="shine-host w-full rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-6 py-4 btn-press shadow-md shadow-amber-200/80"
+                className="shine-host w-full rounded-full bg-[#1d1c1b] hover:bg-black text-white font-bold text-lg px-6 py-4 btn-press shadow-sm"
               >
                 {isLast ? "✅ 이 챕터 끝내기" : "다음 단계 →"}
               </button>

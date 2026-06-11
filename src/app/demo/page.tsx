@@ -8,7 +8,7 @@ export const metadata = {
 // 가상의 인물 "김영희"님의 페이지예요.
 export default function DemoPage() {
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
       <div className="rounded-2xl bg-amber-50 border-2 border-amber-200 px-5 py-4 text-center">
         <p className="text-amber-900">
           👀 이건 <strong>예시</strong>예요. 가이드를 끝내면 이런 페이지가{" "}

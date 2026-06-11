@@ -24,15 +24,13 @@ function CopyBox({ label, text, note }: { label: string; text: string; note?: st
   }
 
   return (
-    <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 overflow-hidden">
-      <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-amber-100/70">
-        <span className="font-bold text-amber-900 text-[15px]">📋 {label}</span>
+    <div className="rounded-2xl bg-[#f7f5f2] overflow-hidden">
+      <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-stone-200/70">
+        <span className="font-bold text-[#343433] text-[15px]">📋 {label}</span>
         <button
           onClick={copy}
-          className={`shrink-0 rounded-xl px-4 py-2 font-bold text-[15px] btn-press ${
-            copied
-              ? "bg-green-600 text-white"
-              : "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-200"
+          className={`shrink-0 rounded-full px-4.5 py-2 font-bold text-[15px] btn-press ${
+            copied ? "bg-[#2ec77f] text-white" : "bg-[#1d1c1b] hover:bg-black text-white"
           }`}
         >
           <span key={String(copied)} className="anim-pop inline-block">
@@ -40,11 +38,11 @@ function CopyBox({ label, text, note }: { label: string; text: string; note?: st
           </span>
         </button>
       </div>
-      <pre className="px-4 py-3 whitespace-pre-wrap break-words font-sans text-[17px] leading-relaxed text-stone-800">
+      <pre className="px-4 py-3 whitespace-pre-wrap break-words font-sans text-[17px] leading-relaxed text-stone-700">
         {text}
       </pre>
       {note && (
-        <p className="px-4 pb-3 text-[15px] text-amber-800">👉 {note}</p>
+        <p className="px-4 pb-3 text-[15px] text-stone-500">👉 {note}</p>
       )}
     </div>
   );
@@ -104,7 +102,7 @@ function Callout({
 function BigLink({ href, label, urlCheck }: { href: string; label: string; urlCheck?: string }) {
   const isExternal = href.startsWith("http");
   const inner = (
-    <span className="shine-host block rounded-2xl bg-gradient-to-r from-stone-800 to-stone-700 text-white text-center font-bold text-lg px-6 py-4 btn-press shadow-md">
+    <span className="shine-host block rounded-full bg-[#1d1c1b] hover:bg-black text-white text-center font-bold text-lg px-6 py-4 btn-press shadow-sm">
       {label} {isExternal ? "↗" : "→"}
     </span>
   );
@@ -157,7 +155,7 @@ export function Blocks({ blocks }: { blocks: Block[] }) {
               <ol key={i} className="space-y-2.5 my-2">
                 {b.items.map((item, j) => (
                   <li key={j} className="flex gap-3">
-                    <span className="shrink-0 w-7 h-7 rounded-full bg-amber-500 text-white font-bold text-[15px] flex items-center justify-center mt-0.5">
+                    <span className="shrink-0 w-7 h-7 rounded-full bg-[#1d1c1b] text-white font-bold text-[15px] flex items-center justify-center mt-0.5">
                       {j + 1}
                     </span>
                     <span className="text-stone-800 leading-[1.7]">{item}</span>
@@ -168,7 +166,7 @@ export function Blocks({ blocks }: { blocks: Block[] }) {
               <ul key={i} className="space-y-2 my-2">
                 {b.items.map((item, j) => (
                   <li key={j} className="flex gap-2.5">
-                    <span className="shrink-0 text-amber-500 font-bold">•</span>
+                    <span className="shrink-0 text-[#3784f4] font-bold">•</span>
                     <span className="text-stone-800 leading-[1.7]">{item}</span>
                   </li>
                 ))}

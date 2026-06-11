@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fffdf9;
-  --foreground: #292524;
+  --background: #ffffff;
+  --foreground: #343433;
+  /* Family 스타일 팔레트 */
+  --heading: #343433;
+  --body-muted: #848280;
+  --beige: #f7f5f2;
+  --beige-dark: #efedea;
+  --green: #2ec77f;
+  --blue: #3784f4;
+  --yellow: #ffbe4c;
+  --orange: #ff5310;
 }
 
 @theme inline {
@@ -19,9 +28,15 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo",
+  -webkit-font-smoothing: antialiased;
+  font-family: Inter, "Pretendard Variable", Pretendard, "Apple SD Gothic Neo",
     "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
   word-break: keep-all; /* 한국어 줄바꿈을 단어 단위로 */
+}
+
+::selection {
+  background: #d8ecfc;
+  color: #008cff;
 }
 
 /* ─────────────────────────────────────────────
