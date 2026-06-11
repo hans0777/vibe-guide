@@ -20,9 +20,9 @@ export default function DemoPage() {
       </div>
 
       {/* 예시 자기소개 페이지 */}
-      <div className="rounded-3xl overflow-hidden border border-stone-200 shadow-md bg-gradient-to-b from-rose-50 to-white">
+      <div className="anim-fade-up rounded-3xl overflow-hidden border border-stone-200 shadow-lg bg-gradient-to-b from-rose-50 to-white">
         <div className="px-6 py-14 text-center space-y-5">
-          <div className="w-32 h-32 mx-auto rounded-full bg-stone-200 flex items-center justify-center text-5xl">
+          <div className="anim-float w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-rose-100 to-amber-100 border-4 border-white shadow-md flex items-center justify-center text-5xl">
             🌷
           </div>
           <div>
@@ -57,7 +57,7 @@ export default function DemoPage() {
       <div className="text-center">
         <Link
           href="/guide/0"
-          className="inline-block rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xl px-10 py-4 transition-colors"
+          className="shine-host inline-block rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold text-xl px-10 py-4 btn-press shadow-md shadow-amber-200"
         >
           나도 만들어 보기 →
         </Link>

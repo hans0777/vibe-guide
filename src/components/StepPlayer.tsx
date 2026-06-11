@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import confetti from "canvas-confetti";
 import type { Chapter, StuckPoint } from "@/lib/content/types";
 import { chapters } from "@/lib/content";
 import { Blocks } from "@/components/Blocks";
@@ -9,7 +10,7 @@ import { chapterDoneSteps, loadProgress, saveStepDone } from "@/lib/progress";
 
 function RiskBadge({ risk }: { risk: NonNullable<Chapter["steps"][number]["risk"]> }) {
   return (
-    <div className="rounded-xl bg-stone-100 border border-stone-200 px-4 py-3 text-[15px] space-y-1">
+    <div className="rounded-2xl bg-stone-50 border border-stone-200 px-4 py-3 text-[15px] space-y-1">
       <p className="text-stone-700">
         {risk.level === "safe" ? "🟢" : "🟡"}{" "}
         <strong>이 단계가 컴퓨터에 하는 일:</strong> {risk.what}
@@ -23,61 +24,90 @@ function RiskBadge({ risk }: { risk: NonNullable<Chapter["steps"][number]["risk"
   );
 }
 
+function Accordion({
+  title,
+  open,
+  onToggle,
+  children,
+}: {
+  title: string;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl bg-white border border-rose-200 overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full text-left px-4 py-3 font-semibold text-stone-800 hover:bg-rose-50 flex justify-between items-center gap-2 transition-colors"
+      >
+        <span>❓ {title}</span>
+        <span
+          className={`text-stone-400 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        >
+          ▼
+        </span>
+      </button>
+      <div
+        className={`grid transition-all duration-300 ease-out ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="px-4 pb-4 pt-1 border-t border-rose-100">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function StuckPanel({ stuck }: { stuck: StuckPoint[] }) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="mt-4 rounded-2xl border-2 border-rose-200 bg-rose-50/60 p-4 space-y-2">
+    <div className="anim-fade-up mt-4 rounded-2xl border-2 border-rose-200 bg-rose-50/60 p-4 space-y-2">
       <p className="font-bold text-rose-900 text-lg">😢 막혔군요. 괜찮아요, 같이 해결해요.</p>
       <p className="text-[15px] text-rose-800 mb-2">아래에서 지금 상황과 비슷한 것을 눌러 보세요.</p>
       {stuck.map((s, i) => (
-        <div key={i} className="rounded-xl bg-white border border-rose-200 overflow-hidden">
-          <button
-            onClick={() => setOpen(open === i ? null : i)}
-            className="w-full text-left px-4 py-3 font-semibold text-stone-800 hover:bg-rose-50 flex justify-between items-center gap-2"
-          >
-            <span>❓ {s.symptom}</span>
-            <span className="text-stone-400">{open === i ? "▲" : "▼"}</span>
-          </button>
-          {open === i && (
-            <div className="px-4 pb-4 pt-1 border-t border-rose-100">
-              <Blocks blocks={s.solution} />
-            </div>
-          )}
-        </div>
+        <Accordion key={i} title={s.symptom} open={open === i} onToggle={() => setOpen(open === i ? null : i)}>
+          <Blocks blocks={s.solution} />
+        </Accordion>
       ))}
-      <div className="rounded-xl bg-white border border-rose-200 overflow-hidden">
-        <button
-          onClick={() => setOpen(open === -1 ? null : -1)}
-          className="w-full text-left px-4 py-3 font-semibold text-stone-800 hover:bg-rose-50 flex justify-between items-center gap-2"
-        >
-          <span>❓ 여기에 없는 문제예요</span>
-          <span className="text-stone-400">{open === -1 ? "▲" : "▼"}</span>
-        </button>
-        {open === -1 && (
-          <div className="px-4 pb-4 pt-1 border-t border-rose-100">
-            <Blocks
-              blocks={[
-                {
-                  type: "p",
-                  text: "그럴 땐 AI에게 직접 물어보는 게 가장 빠릅니다. 지금 보이는 화면의 문구나 오류 메시지를 마우스로 드래그해 복사(Ctrl+C)한 다음, Claude에게 붙여넣고(Ctrl+V) 이렇게 물어보세요.",
-                },
-                {
-                  type: "copy",
-                  label: "Claude에게 물어볼 말 (복사한 메시지 뒤에 붙이세요)",
-                  text: "위 내용은 지금 내 화면에 나온 거야. 나는 코딩을 모르는 초보야. 무슨 상황이고 어떻게 하면 되는지 아주 쉬운 한국어로, 한 단계씩 알려줘.",
-                },
-                {
-                  type: "tip",
-                  text: "스스로 AI에게 질문해서 해결하는 것 — 사실 이게 바이브 코딩의 가장 중요한 기술입니다. 지금 그걸 연습할 기회를 만난 거예요.",
-                },
-              ]}
-            />
-          </div>
-        )}
-      </div>
+      <Accordion
+        title="여기에 없는 문제예요"
+        open={open === -1}
+        onToggle={() => setOpen(open === -1 ? null : -1)}
+      >
+        <Blocks
+          blocks={[
+            {
+              type: "p",
+              text: "그럴 땐 AI에게 직접 물어보는 게 가장 빠릅니다. 지금 보이는 화면의 문구나 오류 메시지를 마우스로 드래그해 복사(Ctrl+C)한 다음, Claude에게 붙여넣고(Ctrl+V) 이렇게 물어보세요.",
+            },
+            {
+              type: "copy",
+              label: "Claude에게 물어볼 말 (복사한 메시지 뒤에 붙이세요)",
+              text: "위 내용은 지금 내 화면에 나온 거야. 나는 코딩을 모르는 초보야. 무슨 상황이고 어떻게 하면 되는지 아주 쉬운 한국어로, 한 단계씩 알려줘.",
+            },
+            {
+              type: "tip",
+              text: "스스로 AI에게 질문해서 해결하는 것 — 사실 이게 바이브 코딩의 가장 중요한 기술입니다. 지금 그걸 연습할 기회를 만난 거예요.",
+            },
+          ]}
+        />
+      </Accordion>
     </div>
   );
+}
+
+/** 챕터 완료 시 폭죽 효과 */
+function fireConfetti(big: boolean) {
+  const base = { spread: 70, ticks: 220, gravity: 0.9, scalar: 1.05, zIndex: 50 };
+  confetti({ ...base, particleCount: big ? 160 : 90, origin: { y: 0.7 } });
+  if (big) {
+    setTimeout(() => confetti({ ...base, particleCount: 80, angle: 60, origin: { x: 0, y: 0.8 } }), 250);
+    setTimeout(() => confetti({ ...base, particleCount: 80, angle: 120, origin: { x: 1, y: 0.8 } }), 450);
+  }
 }
 
 export function StepPlayer({ chapter }: { chapter: Chapter }) {
@@ -102,13 +132,20 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
     window.scrollTo({ top: 0 });
   }, [idx, finished]);
 
+  const nextChapter = chapters.find((c) => c.number === chapter.number + 1);
+  const isGraduation = finished && !nextChapter;
+
+  // 완료 화면이 뜨면 폭죽
+  useEffect(() => {
+    if (finished) fireConfetti(isGraduation);
+  }, [finished, isGraduation]);
+
   if (!ready) {
     return <div className="py-24 text-center text-stone-400">불러오는 중…</div>;
   }
 
   const step = chapter.steps[idx];
   const isLast = idx === chapter.steps.length - 1;
-  const nextChapter = chapters.find((c) => c.number === chapter.number + 1);
 
   function goNext() {
     saveStepDone(chapter.slug, idx + 1);
@@ -120,32 +157,31 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
   }
 
   if (finished) {
-    const isGraduation = !nextChapter;
     return (
       <div className="text-center py-12 space-y-6">
-        <div className="text-6xl">{isGraduation ? "🎓" : "🎉"}</div>
-        <h2 className="text-2xl font-extrabold text-stone-900">
+        <div className="anim-pop text-7xl">{isGraduation ? "🎓" : "🎉"}</div>
+        <h2 className="anim-fade-up text-2xl font-extrabold text-stone-900" style={{ animationDelay: "120ms" }}>
           {isGraduation
             ? "졸업을 축하합니다! 당신은 이제 바이브 코더예요."
             : `챕터 ${chapter.number} 완료! 잘하고 있어요.`}
         </h2>
-        <p className="text-stone-600">
+        <p className="anim-fade-up text-stone-600" style={{ animationDelay: "220ms" }}>
           {isGraduation
             ? "막히면 언제든 이 가이드로 돌아오세요. 진행 기록은 그대로 남아 있어요."
             : "진행 상황이 저장됐어요. 지금 이어서 해도 되고, 쉬었다가 와도 됩니다."}
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="anim-fade-up flex flex-col sm:flex-row gap-3 justify-center" style={{ animationDelay: "320ms" }}>
           {nextChapter && (
             <Link
               href={`/guide/${nextChapter.slug}`}
-              className="rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg px-8 py-4 transition-colors"
+              className="shine-host rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-8 py-4 btn-press shadow-md shadow-amber-200"
             >
               다음: 챕터 {nextChapter.number}. {nextChapter.title} →
             </Link>
           )}
           <Link
             href="/"
-            className="rounded-2xl bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-lg px-8 py-4 transition-colors"
+            className="rounded-2xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-lg px-8 py-4 btn-press"
           >
             전체 목차로
           </Link>
@@ -161,11 +197,11 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
         {chapter.steps.map((s, i) => (
           <div
             key={s.id}
-            className={`h-2.5 rounded-full transition-all ${
+            className={`h-2.5 rounded-full transition-all duration-500 ${
               i < idx
-                ? "bg-amber-500 flex-1"
+                ? "bg-gradient-to-r from-amber-400 to-orange-400 flex-1"
                 : i === idx
-                ? "bg-amber-400 flex-[2]"
+                ? "bg-amber-400 flex-[2] shadow-sm shadow-amber-200"
                 : "bg-stone-200 flex-1"
             }`}
           />
@@ -175,7 +211,8 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
         챕터 {chapter.number} · {idx + 1} / {chapter.steps.length} 단계
       </p>
 
-      <div className="rounded-3xl bg-white border border-stone-200 shadow-sm p-6 sm:p-8 space-y-5">
+      {/* key={idx} — 단계가 바뀔 때마다 부드럽게 등장 */}
+      <div key={idx} className="anim-fade-up rounded-3xl bg-white border border-stone-200/80 shadow-sm p-6 sm:p-8 space-y-5">
         <h2 className="text-2xl font-extrabold text-stone-900 leading-snug">{step.title}</h2>
         {step.risk && <RiskBadge risk={step.risk} />}
         <Blocks blocks={step.blocks} />
@@ -188,13 +225,13 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={goNext}
-                  className="flex-1 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg px-6 py-4 transition-colors"
+                  className="shine-host flex-1 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-6 py-4 btn-press shadow-md shadow-amber-200/80"
                 >
                   ✅ 네! 다음으로
                 </button>
                 <button
                   onClick={() => setShowStuck(!showStuck)}
-                  className="flex-1 rounded-2xl bg-white border-2 border-rose-300 text-rose-700 hover:bg-rose-50 font-bold text-lg px-6 py-4 transition-colors"
+                  className="flex-1 rounded-2xl bg-white border-2 border-rose-300 text-rose-700 hover:bg-rose-50 font-bold text-lg px-6 py-4 btn-press"
                 >
                   😢 막혔어요
                 </button>
@@ -205,7 +242,7 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
             <div className="pt-3">
               <button
                 onClick={goNext}
-                className="w-full rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg px-6 py-4 transition-colors"
+                className="shine-host w-full rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-lg px-6 py-4 btn-press shadow-md shadow-amber-200/80"
               >
                 {isLast ? "✅ 이 챕터 끝내기" : "다음 단계 →"}
               </button>
@@ -217,13 +254,13 @@ export function StepPlayer({ chapter }: { chapter: Chapter }) {
       {/* 이전으로 */}
       <div className="flex justify-between text-[15px]">
         {idx > 0 ? (
-          <button onClick={() => setIdx(idx - 1)} className="text-stone-500 hover:text-stone-800 font-semibold">
+          <button onClick={() => setIdx(idx - 1)} className="text-stone-500 hover:text-stone-800 font-semibold transition-colors">
             ← 이전 단계 다시 보기
           </button>
         ) : (
           <span />
         )}
-        <Link href="/" className="text-stone-400 hover:text-stone-700">
+        <Link href="/" className="text-stone-400 hover:text-stone-700 transition-colors">
           목차로 나가기 (저장돼요)
         </Link>
       </div>

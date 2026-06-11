@@ -29,13 +29,15 @@ function CopyBox({ label, text, note }: { label: string; text: string; note?: st
         <span className="font-bold text-amber-900 text-[15px]">📋 {label}</span>
         <button
           onClick={copy}
-          className={`shrink-0 rounded-xl px-4 py-2 font-bold text-[15px] transition-colors ${
+          className={`shrink-0 rounded-xl px-4 py-2 font-bold text-[15px] btn-press ${
             copied
               ? "bg-green-600 text-white"
-              : "bg-amber-500 text-white hover:bg-amber-600"
+              : "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-200"
           }`}
         >
-          {copied ? "✅ 복사됐어요!" : "복사하기"}
+          <span key={String(copied)} className="anim-pop inline-block">
+            {copied ? "✅ 복사됐어요!" : "복사하기"}
+          </span>
         </button>
       </div>
       <pre className="px-4 py-3 whitespace-pre-wrap break-words font-sans text-[17px] leading-relaxed text-stone-800">
@@ -102,7 +104,7 @@ function Callout({
 function BigLink({ href, label, urlCheck }: { href: string; label: string; urlCheck?: string }) {
   const isExternal = href.startsWith("http");
   const inner = (
-    <span className="block rounded-2xl bg-stone-800 hover:bg-stone-700 text-white text-center font-bold text-lg px-6 py-4 transition-colors">
+    <span className="shine-host block rounded-2xl bg-gradient-to-r from-stone-800 to-stone-700 text-white text-center font-bold text-lg px-6 py-4 btn-press shadow-md">
       {label} {isExternal ? "↗" : "→"}
     </span>
   );
