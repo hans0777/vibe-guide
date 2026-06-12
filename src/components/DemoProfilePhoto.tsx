@@ -24,7 +24,7 @@ export function DemoProfilePhoto() {
     <img
       src="/demo/profile.jpg"
       alt="실행연구소 소장 프로필 사진"
-      className="aspect-[3/4] w-full rounded-3xl object-cover object-top"
+      className="aspect-[3/4] w-full rounded-3xl object-cover object-[center_70%]"
       onError={() => setMissing(true)}
     />
   );
